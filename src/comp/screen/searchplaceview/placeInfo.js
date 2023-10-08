@@ -708,36 +708,36 @@ const PlaceInfoView = (props) => {
 
 	const getAIResponse = async (userInput) => {
 		const requestBody = {
-			userInput: userInput,
-			place: placeItem?.name,
-			messages: getMessagesByKey(placeItem?.name)
+		  user_query: userInput,
+		  location: placeItem?.name,
 		};
-	
+	  
 		try {
-			const response = await fetch('http://localhost:8000/get_ai_response', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(requestBody)
-			});
-	
-			if (!response.ok) {
-				throw new Error('Failed to fetch AI response');
-			}
-	
-			const data = await response.json();
-	
-			if ('aiResponse' in data) {
-				return data.aiResponse;
-			} else {
-				throw new Error('Invalid response format from the server');
-			}
+		  const response = await fetch('https://fastapi-im67.onrender.com/aqua/me', {
+			method: 'POST',
+			headers: {
+			  'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(requestBody)
+		  });
+		  console.log(requestBody)
+		  console.log(response)
+		  if (!response.ok) {
+			throw new Error('Failed to fetch AI response');
+		  }
+	  
+		  const data = await response.json();
+		  console.log(data)
+		  if (data.bot_response) {
+			return data.bot_response;
+		  } else {
+			throw new Error('Invalid response format from the server');
+		  }
 		} catch (error) {
-			console.error(error);
-			return 'Failed to get AI response';
+		  console.error(error);
+		  return 'Failed to get AI response';
 		}
-	};
+	  };
 	
 
 	function urlify(text) {
